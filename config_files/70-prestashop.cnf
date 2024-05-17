@@ -1,0 +1,16 @@
+[mariadbd]
+host_cache_size         = 1000
+innodb_buffer_pool_size = 1G
+join_buffer_size		= 2M 
+log_warnings            = 0
+max_heap_table_size     = 10M
+performance_schema      = OFF
+query_cache_limit       = 128K 
+query_cache_size        = 15M
+query_cache_type        = ON
+read_buffer_size		= 2M 
+read_rnd_buffer_size	= 1M
+sort_buffer_size 		= 2M
+table_open_cache        = 4000
+thread_cache_size       = 80
+tmp_table_size          = 10M

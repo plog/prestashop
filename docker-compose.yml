@@ -1,0 +1,50 @@
+version: '3'
+services:
+  mysql:
+    container_name: prestasql
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: prestashop
+    networks:
+      - prestashop_network
+    volumes:
+      - ./config_files/70-prestashop.cnf:/etc/mysql/mariadb.conf.d/70-prestashop.cnf
+
+  prestashop:
+    container_name: prestashop
+    image: prestadevel:latest
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - 8080:80
+      - 2222:22
+    volumes:
+      - ./init-scripts:/tmp/init-scripts:ro
+      - ./modules/easybackup:/var/www/html/modules/easybackup:rw
+    environment:
+      ADMIN_MAIL: demo@prestashop.com
+      ADMIN_PASSWD: prestashop_demo
+      DB_NAME: prestashop
+      DB_PASSWD: admin
+      DB_PORT: 3306
+      DB_PREFIX: ps_
+      DB_SERVER: prestasql
+      DB_USER: root
+      PS_ERASE_DB: 0
+      PS_INSTALL_DB: 0
+      INIT_SCRIPTS_DIR: /tmp/init-scripts
+      PS_DEV_MODE: 1
+      PS_DEMO_MODE: 0
+      PS_DOMAIN: 10.11.12.100:8080
+      PS_FOLDER_ADMIN: admin1
+      PS_FOLDER_INSTALL: installed
+      PS_FOLDER: /var/www/html
+      PS_INSTALL_AUTO: 1
+      PS_LANGUAGE: en
+    networks:
+      - prestashop_network
+networks:
+    prestashop_network:
