@@ -37,7 +37,6 @@ services:
       PS_INSTALL_DB: 0
       INIT_SCRIPTS_DIR: /tmp/init-scripts
       PS_DEV_MODE: 1
-      PS_DEMO_MODE: 0
       PS_DOMAIN: 10.11.12.100:8080
       PS_FOLDER_ADMIN: admin1
       PS_FOLDER_INSTALL: installed

@@ -59,3 +59,5 @@ This script facilitates building and managing the Docker containers. It includes
 - Ensure your public SSH key is correctly added to the configuration for SSH access.
 - Adjust any environment variables as necessary in the `docker-compose.yml` file.
 
+https://ramyhakam.medium.com/php-remote-debugging-with-vscode-a-comprehensive-guide-f20e67000b7d
+PS Commands : https://github.com/nenes25/prestashop_console/blob/1.7/COMMANDS.md

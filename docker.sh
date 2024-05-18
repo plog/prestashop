@@ -29,6 +29,16 @@ if [ "$action" == "build" ]; then
 
 elif [ "$action" == "up" ]; then
   docker build --no-cache -t prestadevel:latest -f $dock_devel .
-  $DOCKER_COMPOSE_CMD -p prestadevel up -d
-fi
+  $DOCKER_COMPOSE_CMD up -d
 
+# -------------------------------------
+# ------ SERVICES BUILD DEPLOY
+# -------------------------------------  
+
+elif [ "$action" == "restart" ]; then
+  $DOCKER_COMPOSE_CMD stop prestashop
+  $DOCKER_COMPOSE_CMD rm -f prestashop
+  docker rmi -f prestadevel:latest
+  docker build --no-cache -t prestadevel:latest -f $dock_devel .
+  $DOCKER_COMPOSE_CMD up -d
+fi

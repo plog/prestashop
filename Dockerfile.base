@@ -29,12 +29,16 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 RUN a2enmod rewrite
+
 RUN docker-php-source extract \
     && if [ -d "/usr/src/php/ext/mysql" ]; then docker-php-ext-install mysql; fi \
     && if [ -d "/usr/src/php/ext/mcrypt" ]; then docker-php-ext-install mcrypt; fi \
     && if [ -d "/usr/src/php/ext/opcache" ]; then docker-php-ext-install opcache; fi \
     && docker-php-source delete
 
+RUN rm /var/log/apache2/access.log /var/log/apache2/error.log && \
+    touch /var/log/apache2/access.log /var/log/apache2/error.log && \
+    chown www-data:www-data /var/log/apache2/*
 
 RUN mkdir -p /run/sshd    
 COPY config_files/authorized_keys /root/.ssh/authorized_keys

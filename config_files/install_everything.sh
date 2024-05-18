@@ -113,7 +113,6 @@ if ! prestashop_installed; then
 
     if [ $PS_INSTALL_AUTO = 1 ]; then
         echo -e "* Installing PrestaShop, this may take a while ..."
-
         if [ "$PS_DOMAIN" = "<to be defined>" ]; then
             export PS_DOMAIN=$(hostname -i)
         fi
@@ -126,10 +125,7 @@ if ! prestashop_installed; then
         --all_languages=$PS_ALL_LANGUAGES --newsletter=0 --send_email=0 --ssl=$PS_ENABLE_SSL
 
         if [ $? -ne 0 ]; then
-            echo 'warning: PrestaShop installation failed.'
-        else
-            echo -e "* Removing install folder..."
-            rm -r /var/www/html/install/
+            echo '-----> PrestaShop installation failed. <-------'
         fi
     fi
 
@@ -138,12 +134,6 @@ if ! prestashop_installed; then
 
 else
     echo -e "* PrestaShop Core already installed..."
-fi
-
-# Enable DEMO mode if required
-if [ $PS_DEMO_MODE -ne 0 ]; then
-    echo -e "* Enabling DEMO mode ..."
-    sed -ie "s/define('_PS_MODE_DEMO_', false);/define('_PS_MODE_DEMO_',\ true);/g" /var/www/html/config/defines.inc.php
 fi
 
 # Run init scripts
@@ -158,9 +148,29 @@ fi
 
 # Rename admin folder if required
 if [ "$PS_FOLDER_ADMIN" != "admin" ] && [ -d "/var/www/html/admin" ]; then
-    echo -e "* Renaming admin folder as $PS_FOLDER_ADMIN ..."
+    echo -e "* Admin folder ($PS_FOLDER_ADMIN), removing install, activate debug,..."
     mv /var/www/html/admin /var/www/html/$PS_FOLDER_ADMIN/
+    rm -r /var/www/html/install/
+    sed -i "s/xdebug.remote_enable=0/xdebug.remote_enable=1/" /usr/local/etc/php/php.ini
+    echo '<?php phpinfo(); ?>' > /var/www/html/i.php
+    cat <<EOF >> /usr/local/etc/php/php.ini
+[XDebug]
+xdebug.remote_enable=1
+xdebug.remote_connect_back=1
+xdebug.mode=debug
+xdebug.start_with_request=yes
+xdebug.discover_client_host=no
+xdebug.log_level=2
+EOF
+
+
 fi
+
+
+# cd "$PS_FOLDER"
+# echo "* [testmodule] installing the module... PS folder : $PS_FOLDER"
+# php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "demosymfonyformsimple"
+
 
 # Run Apache & SSH
 echo -e "* Starting Apache & SSH"

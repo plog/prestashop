@@ -1,12 +1,14 @@
 FROM prestabase:latest
 
 # Init Scripts
-COPY config_files/docker_run_v2.sh /tmp/
 COPY config_files/php.ini /usr/local/etc/php/
 COPY config_files/000-default.conf /etc/apache2/sites-enabled/
 COPY config_files/apache2.conf /etc/apache2/
 COPY config_files/bashrc /root/.bashrc
-COPY prestashop_8.1.5.zip /tmp/prestashop.zip
-RUN echo '<?php phpinfo(); ?>' >> /var/www/html/i.php
+COPY example-modules /var/www/html/example-modules
 
-CMD ["/tmp/docker_run_v2.sh"]
+# Local PS Zip
+COPY prestashop_8.1.5.zip /tmp/prestashop.zip
+
+COPY config_files/install_everything.sh /tmp/
+CMD ["/tmp/install_everything.sh"]
