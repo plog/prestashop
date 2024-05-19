@@ -15,8 +15,8 @@ Ensure you have Docker and Docker Compose installed on your machine.
 ### Building the Base and Development Containers
 
 1. Clone this repository.
-
-2. Build the Docker images using the provided `docker.sh` script:
+2. You can change Dockerfile.devel to install a different version of PS or customize your image
+3. Build the Docker images using the provided `docker.sh` script:
 
    ```sh
    ./docker.sh build
@@ -53,6 +53,15 @@ This file defines the services and configurations for Docker Compose, including 
 ### docker.sh
 
 This script facilitates building and managing the Docker containers. It includes commands for building the base and development containers and starting the development environment.
+
+### install_everything.sh
+
+This script automates the setup process by:
+
+1. Updating package lists and installing necessary dependencies.
+2. Installing Docker and Docker Compose.
+3. Setting up Docker images and containers for PrestaShop.
+4. Configuring the development environment.
 
 ## Notes
 
