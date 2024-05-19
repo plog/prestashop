@@ -3,6 +3,11 @@
 
 This repository provides a complete setup for a PrestaShop development environment using Docker. The setup includes multiple components including MySQL, PrestaShop, Loki, Promtail, and Grafana for log analysis.
 
+## Demo
+
+[![Watch the video]](demo.mp4)
+
+
 ## Prerequisites
 
 Ensure you have Docker and Docker Compose installed on your machine.
