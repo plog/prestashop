@@ -2,3 +2,4 @@ authorized_keys
 pondok
 modules/*
 *.zip
+loki

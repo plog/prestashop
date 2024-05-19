@@ -8,7 +8,7 @@ COPY config_files/bashrc /root/.bashrc
 COPY example-modules /var/www/html/example-modules
 
 # Local PS Zip
-COPY prestashop_8.1.5.zip /tmp/prestashop.zip
+COPY prestashop_8.1.6.zip /tmp/prestashop.zip
 
 COPY config_files/install_everything.sh /tmp/
 CMD ["/tmp/install_everything.sh"]

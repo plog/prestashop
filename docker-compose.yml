@@ -21,9 +21,12 @@ services:
     ports:
       - 8080:80
       - 2222:22
+      - 6688:6688
     volumes:
       - ./init-scripts:/tmp/init-scripts:ro
       - ./modules/easybackup:/var/www/html/modules/easybackup:rw
+      - apache_logs:/var/log/apache:rw
+      - prestashop_logs:/var/www/html/var/logs:rw
     environment:
       ADMIN_MAIL: demo@prestashop.com
       ADMIN_PASSWD: prestashop_demo
@@ -45,5 +48,45 @@ services:
       PS_LANGUAGE: en
     networks:
       - prestashop_network
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin    
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      # - ./config_files/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+       
+    depends_on:
+      - loki
+    networks:
+      - prestashop_network
+
+  loki:
+    container_name: loki
+    image: grafana/loki:2.7.1
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./config_files/loki_config:/etc/loki
+      - ./loki/data:/loki:rw
+      - ./loki/wal:/wal:rw
+      - apache_logs:/var/log/apache:ro
+      - prestashop_logs:/var/log/prestashop:ro
+    networks:
+      - prestashop_network
+
+volumes:
+  grafana_data:
+  apache_logs:
+  prestashop_logs:
+  loki_data:
+    driver: local
 networks:
-    prestashop_network:
+  prestashop_network:

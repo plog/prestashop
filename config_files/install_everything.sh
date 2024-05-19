@@ -124,6 +124,18 @@ if ! prestashop_installed; then
         --password=$ADMIN_PASSWD --email="$ADMIN_MAIL" --language=$PS_LANGUAGE --country=$PS_COUNTRY \
         --all_languages=$PS_ALL_LANGUAGES --newsletter=0 --send_email=0 --ssl=$PS_ENABLE_SSL
 
+        # Enable debug mode and force compile, disable cache
+        CONFIG_FILE="/var/www/html/config/defines.inc.php"
+        sed -i "s/define('_PS_MODE_DEV_', false);/define('_PS_MODE_DEV_', true);/" $CONFIG_FILE
+        sed -i "s/define('_PS_DEBUG_PROFILING_', false);/define('_PS_DEBUG_PROFILING_', false);/" $CONFIG_FILE
+        sed -i "s/define('_PS_SMARTY_FORCE_COMPILE_', false);/define('_PS_SMARTY_FORCE_COMPILE_', true);/" $CONFIG_FILE
+        sed -i "s/define('_PS_SMARTY_CACHE_', true);/define('_PS_SMARTY_CACHE_', false);/" $CONFIG_FILE
+        
+        mysql -h $DB_SERVER -P $DB_PORT -u $DB_USER -p$DB_PASSWD $DB_NAME <<EOF
+UPDATE ${DB_PREFIX}configuration SET value = '2' WHERE name = 'PS_SMARTY_FORCE_COMPILE';
+UPDATE ${DB_PREFIX}configuration SET value = '0' WHERE name = 'PS_SMARTY_CACHE';
+UPDATE ${DB_PREFIX}configuration SET value = '1' WHERE name = 'PS_DEV_MODE';
+EOF
         if [ $? -ne 0 ]; then
             echo '-----> PrestaShop installation failed. <-------'
         fi
@@ -136,24 +148,19 @@ else
     echo -e "* PrestaShop Core already installed..."
 fi
 
-# Run init scripts
-if dir_exists "/tmp/init-scripts/"; then
-    for script in /tmp/init-scripts/*; do
-        echo -e "* Running $script"
-        [ -f "$script" ] && "$script"
-    done
-else
-    echo -e "* No init script found, let's continue..."
-fi
+# Rename admin folder and delete install
+echo -e "* Admin folder ($PS_FOLDER_ADMIN), removing install, activate debug,..."
+mv /var/www/html/admin /var/www/html/$PS_FOLDER_ADMIN/
+# Path to admin index.php
+ADMIN_INDEX="/var/www/html/$PS_FOLDER_ADMIN/index.php"
+sed -i "/Debug::enable();/a\    ini_set('error_reporting', E_ALL \& ~E_NOTICE \& ~E_DEPRECATED);" $ADMIN_INDEX
 
-# Rename admin folder if required
-if [ "$PS_FOLDER_ADMIN" != "admin" ] && [ -d "/var/www/html/admin" ]; then
-    echo -e "* Admin folder ($PS_FOLDER_ADMIN), removing install, activate debug,..."
-    mv /var/www/html/admin /var/www/html/$PS_FOLDER_ADMIN/
-    rm -r /var/www/html/install/
-    sed -i "s/xdebug.remote_enable=0/xdebug.remote_enable=1/" /usr/local/etc/php/php.ini
-    echo '<?php phpinfo(); ?>' > /var/www/html/i.php
-    cat <<EOF >> /usr/local/etc/php/php.ini
+rm -r /var/www/html/install/
+
+# XDebug & Some more debug features
+sed -i "s/xdebug.remote_enable=0/xdebug.remote_enable=1/" /usr/local/etc/php/php.ini
+echo '<?php phpinfo(); ?>' > /var/www/html/i.php
+cat <<EOF >> /usr/local/etc/php/php.ini
 [XDebug]
 xdebug.remote_enable=1
 xdebug.remote_connect_back=1
@@ -163,16 +170,11 @@ xdebug.discover_client_host=no
 xdebug.log_level=2
 EOF
 
-
-fi
-
-
-# cd "$PS_FOLDER"
-# echo "* [testmodule] installing the module... PS folder : $PS_FOLDER"
-# php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "demosymfonyformsimple"
-
+chown -R www-data:www-data /var/log/apache2
+chown -R www-data:www-data /var/www/html
 
 # Run Apache & SSH
 echo -e "* Starting Apache & SSH"
 service apache2 start
+
 /usr/sbin/sshd -D

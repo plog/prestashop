@@ -61,3 +61,5 @@ This script facilitates building and managing the Docker containers. It includes
 
 https://ramyhakam.medium.com/php-remote-debugging-with-vscode-a-comprehensive-guide-f20e67000b7d
 PS Commands : https://github.com/nenes25/prestashop_console/blob/1.7/COMMANDS.md
+module bootstrap: https://github.com/friends-of-presta/demo-cqrs-hooks-usage-module
+http://logio.org/
