@@ -5,7 +5,7 @@ This repository provides a complete setup for a PrestaShop development environme
 
 ## Demo
 
-[![Watch the video]](demo.mp4)
+[![Watch the video](https://img.youtube.com/vi/I7AREvHALY/default.jpg)](https://youtu.be/-I7AREvHALY)
 
 
 ## Prerequisites
