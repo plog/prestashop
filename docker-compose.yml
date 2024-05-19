@@ -74,12 +74,17 @@ services:
   grafana:
     image: grafana/grafana:7.3.1
     container_name: grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin    
     networks:
       - prestashop_network
     ports:
       - "3000:3000"
     volumes:
       - ./grafana:/var/lib/grafana
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources
+
 
 networks:
   prestashop_network:

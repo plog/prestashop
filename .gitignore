@@ -3,3 +3,6 @@ pondok
 modules/*
 *.zip
 loki
+logs/*
+/logs/apache/*.log
+/logs/prestashop/*.log
