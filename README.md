@@ -7,10 +7,15 @@ This repository provides a complete setup for a PrestaShop development environme
 
 [![Watch the video](https://img.youtube.com/vi/-I7AREvHALY/default.jpg)](https://youtu.be/-I7AREvHALY)
 
+At the end, when everything is running you should have this:
+
+![alt text](19222828.png)
 
 ## Prerequisites
 
-Ensure you have Docker and Docker Compose installed on your machine.
+- Ensure you have Docker and Docker Compose installed on your machine.
+- Download a version of Prestashop
+- Create necessery folders for Grafana, Loki,...
 
 ## Setup Instructions
 
