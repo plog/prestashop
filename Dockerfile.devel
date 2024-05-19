@@ -1,14 +1,14 @@
 FROM prestabase:latest
 
 # Init Scripts
-COPY config_files/php.ini /usr/local/etc/php/
-COPY config_files/000-default.conf /etc/apache2/sites-enabled/
-COPY config_files/apache2.conf /etc/apache2/
-COPY config_files/bashrc /root/.bashrc
+COPY config/php.ini /usr/local/etc/php/
+COPY config/000-default.conf /etc/apache2/sites-enabled/
+COPY config/apache2.conf /etc/apache2/
+COPY config/bashrc /root/.bashrc
 COPY example-modules /var/www/html/example-modules
 
 # Local PS Zip
 COPY prestashop_8.1.6.zip /tmp/prestashop.zip
 
-COPY config_files/install_everything.sh /tmp/
+COPY config/install_everything.sh /tmp/
 CMD ["/tmp/install_everything.sh"]

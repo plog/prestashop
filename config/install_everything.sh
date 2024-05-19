@@ -153,7 +153,7 @@ echo -e "* Admin folder ($PS_FOLDER_ADMIN), removing install, activate debug,...
 mv /var/www/html/admin /var/www/html/$PS_FOLDER_ADMIN/
 # Path to admin index.php
 ADMIN_INDEX="/var/www/html/$PS_FOLDER_ADMIN/index.php"
-sed -i "/Debug::enable();/a\    ini_set('error_reporting', E_ALL \& ~E_NOTICE \& ~E_DEPRECATED);" $ADMIN_INDEX
+sed -i "/Debug::enable();/a\    ini_set('error_reporting', E_ALL \& ~E_NOTICE \& ~E_DEPRECATED & ~E_WARNING);" $ADMIN_INDEX
 
 rm -r /var/www/html/install/
 

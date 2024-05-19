@@ -25,8 +25,8 @@ services:
     volumes:
       - ./init-scripts:/tmp/init-scripts:ro
       - ./modules/easybackup:/var/www/html/modules/easybackup:rw
-      - apache_logs:/var/log/apache:rw
-      - prestashop_logs:/var/www/html/var/logs:rw
+      - ./logs/apache:/var/log/apache2:rw
+      - ./logs/prestashop:/var/www/html/var/logs:rw
     environment:
       ADMIN_MAIL: demo@prestashop.com
       ADMIN_PASSWD: prestashop_demo
@@ -49,44 +49,37 @@ services:
     networks:
       - prestashop_network
 
-  grafana:
-    container_name: grafana
-    image: grafana/grafana
-    environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin    
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-      # - ./config_files/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-       
-    depends_on:
-      - loki
+  loki:
+    image: grafana/loki:2.0.0
+    container_name: loki
     networks:
       - prestashop_network
-
-  loki:
-    container_name: loki
-    image: grafana/loki:2.7.1
     ports:
       - "3100:3100"
     volumes:
-      - ./config_files/loki_config:/etc/loki
-      - ./loki/data:/loki:rw
-      - ./loki/wal:/wal:rw
-      - apache_logs:/var/log/apache:ro
-      - prestashop_logs:/var/log/prestashop:ro
+      - ./config/loki-config.yaml:/etc/loki/local-config.yaml
+      - ./loki:/loki
+
+  promtail:
+    image: grafana/promtail:2.0.0
+    container_name: promtail
     networks:
       - prestashop_network
+    volumes:
+      - ./config/promtail-config.yml:/etc/promtail/promtail.yml
+      - ./logs/apache:/var/log/apache2
+      - ./logs/prestashop:/var/www/html/var/logs
+    command: -config.file=/etc/promtail/promtail.yml
 
-volumes:
-  grafana_data:
-  apache_logs:
-  prestashop_logs:
-  loki_data:
-    driver: local
+  grafana:
+    image: grafana/grafana:7.3.1
+    container_name: grafana
+    networks:
+      - prestashop_network
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana:/var/lib/grafana
+
 networks:
   prestashop_network:

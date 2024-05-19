@@ -68,7 +68,10 @@ This script automates the setup process by:
 - Ensure your public SSH key is correctly added to the configuration for SSH access.
 - Adjust any environment variables as necessary in the `docker-compose.yml` file.
 
-https://ramyhakam.medium.com/php-remote-debugging-with-vscode-a-comprehensive-guide-f20e67000b7d
-PS Commands : https://github.com/nenes25/prestashop_console/blob/1.7/COMMANDS.md
-module bootstrap: https://github.com/friends-of-presta/demo-cqrs-hooks-usage-module
-http://logio.org/
+## Links
+
+- https://ramyhakam.medium.com/php-remote-debugging-with-vscode-a-comprehensive-guide-f20e67000b7d
+- PS Commands : https://github.com/nenes25/prestashop_console/blob/1.7/COMMANDS.md
+- module bootstrap: https://github.com/friends-of-presta/demo-cqrs-hooks-usage-module
+- http://logio.org/
+- https://webkul.com/blog/create-your-own-console-command-in-prestashop-1-7/

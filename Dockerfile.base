@@ -41,6 +41,6 @@ RUN rm /var/log/apache2/access.log /var/log/apache2/error.log && \
     chown www-data:www-data /var/log/apache2/*
 
 RUN mkdir -p /run/sshd    
-COPY config_files/authorized_keys /root/.ssh/authorized_keys
+COPY config/authorized_keys /root/.ssh/authorized_keys
 
 CMD ["php"]
