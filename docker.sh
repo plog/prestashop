@@ -1,5 +1,11 @@
 #!/bin/bash
 
+mkdir -p logs/apache
+mkdir -p logs/prestashop
+mkdir -p loki/chunks
+mkdir -p loki/index
+mkdir -p grafana
+
 # Function to check if docker-compose is available
 function check_docker_compose() {
     if command -v docker-compose >/dev/null 2>&1; then
@@ -11,6 +17,7 @@ function check_docker_compose() {
 
 # Assign the correct command to DOCKER_COMPOSE_CMD
 DOCKER_COMPOSE_CMD=$(check_docker_compose)
+echo "Using: $DOCKER_COMPOSE_CMD"
 dock_base="Dockerfile.base"
 dock_devel="Dockerfile.devel"
 
@@ -36,6 +43,7 @@ elif [ "$action" == "up" ]; then
 # -------------------------------------  
 
 elif [ "$action" == "restart" ]; then
+  $DOCKER_COMPOSE_CMD down
   $DOCKER_COMPOSE_CMD stop prestashop
   $DOCKER_COMPOSE_CMD rm -f prestashop
   docker rmi -f prestadevel:latest

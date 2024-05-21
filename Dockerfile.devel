@@ -10,5 +10,5 @@ COPY example-modules /var/www/html/example-modules
 # Local PS Zip
 COPY prestashop_8.1.6.zip /tmp/prestashop.zip
 
-COPY config/install_everything.sh /tmp/
-CMD ["/tmp/install_everything.sh"]
+COPY installPS.sh /tmp/
+CMD ["/tmp/installPS.sh"]

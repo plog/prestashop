@@ -10,7 +10,7 @@ services:
     networks:
       - prestashop_network
     volumes:
-      - ./config_files/70-prestashop.cnf:/etc/mysql/mariadb.conf.d/70-prestashop.cnf
+      - ./config/70-prestashop.cnf:/etc/mysql/mariadb.conf.d/70-prestashop.cnf
 
   prestashop:
     container_name: prestashop
@@ -23,7 +23,6 @@ services:
       - 2222:22
       - 6688:6688
     volumes:
-      - ./init-scripts:/tmp/init-scripts:ro
       - ./modules/easybackup:/var/www/html/modules/easybackup:rw
       - ./logs/apache:/var/log/apache2:rw
       - ./logs/prestashop:/var/www/html/var/logs:rw

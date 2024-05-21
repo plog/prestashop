@@ -6,3 +6,5 @@ loki
 logs/*
 /logs/apache/*.log
 /logs/prestashop/*.log
+*.db
+venv

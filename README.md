@@ -14,8 +14,8 @@ At the end, when everything is running you should have this:
 ## Prerequisites
 
 - Ensure you have Docker and Docker Compose installed on your machine.
-- Download a version of Prestashop
-- Create necessery folders for Grafana, Loki,...
+- Download a version of Prestashop and update the Dockerfile.devel
+- Create necessary folders for Grafana, Loki,...
 
 ## Setup Instructions
 
@@ -90,7 +90,7 @@ This setup includes Grafana for visualizing logs and Loki as a log aggregation s
 
 ### Directory Structure
 
-- `config_files/`: Contains configuration files for MySQL and other services.
+- `config/`: Contains configuration files for MySQL and other services.
 - `init-scripts/`: Initialization scripts for setting up the environment.
 - `logs/`: Directory to store logs from Apache and PrestaShop.
 - `modules/`: Custom PrestaShop modules for development.
